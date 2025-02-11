@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>State-Based UI</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<style type="text/css">
+		body {
+			margin: 0 auto;
+			max-width: 40em;
+			width: 88%;
+		}
+
+		.callout {
+			background-color: #f7f7f7;
+			border: 1px solid #e5e5e5;
+			border-radius: 0.25em;
+			padding: 0.5em 1em;
+		}
+	</style>
+</head>
+<body>
+
+	<a href="/checkout">🛒 Checkout (42 Items)</a>
+
+	<br><br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>
+
+	<h2>Jack Sparrow Bandana</h2>
+	<p>Look stylish in this dapper pirate bandana. Great for all occasions!</p>
+
+	<!-- This only shows up if this item is in the cart -->
+	<div class="callout">
+		<p>You already have this item in your cart!</p>
+	</div>
+
+	<form>
+		<input type="hidden" name="product" value="jackSparrowBanana">
+
+		<button>Add to Cart</button>
+	</form>
+
+
+	<script type="module">
+		let cart = {
+			jackSparrowBandana: 2,
+			// ...
+		};
+	</script>
+
+</body>
+</html>

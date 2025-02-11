@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>State-Based UI</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<style type="text/css">
+		body {
+			margin: 0 auto;
+			max-width: 40em;
+			width: 88%;
+		}
+
+		.callout {
+			background-color: #f7f7f7;
+			border: 1px solid #e5e5e5;
+			border-radius: 0.25em;
+			margin-bottom: 1em;
+			padding: 0.25em 0.5em;
+		}
+	</style>
+</head>
+<body>
+
+	<a href="/checkout">🛒 Checkout <span id="cart"></span></a>
+
+	<br><br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>
+
+	<h2>Jack Sparrow Bandana</h2>
+	<p>Look stylish in this dapper pirate bandana. Great for all occasions!</p>
+
+	<!-- This only has content if this item is in the cart -->
+	<div data-in-cart="jackSparrowBanana"></div>
+
+	<form>
+		<input type="hidden" name="product" value="jackSparrowBanana">
+		<button>Add to Cart</button>
+	</form>
+
+
+	<script type="module">
+		// Hold the cart data
+		let cart = {};
+
+		// Get all of the elements on the page
+		let cartElem = document.querySelector('#cart');
+		let calloutElem = document.querySelector('[data-in-cart]');
+		let calloutUID = calloutElem?.getAttribute('data-in-cart');
+		let form = document.querySelector('form');
+
+		// The Cart component
+		function updateCartCount () {
+
+			// Get the cart length
+			let cartLength = 0;
+			for (let [key, value] of Object.entries(cart)) {
+				cartLength += value;
+			}
+
+			// Render the link
+			cartElem.textContent = `(${cartLength} Item${cartLength === 1 ? '' : 's'})`;
+
+		}
+
+		// Show the callout
+		function showCallout () {
+
+			// Check if the item is in the cart
+			let isInCart = Object.hasOwn(cart, calloutUID);
+
+			// If it's not, render nothing
+			if (!isInCart) return;
+
+			// Otherwise, show a message
+			calloutElem.innerHTML =
+				`<div class="callout">
+					<p>You already have this item in your cart!</p>
+				</div>`;
+
+		}
+
+		// Handle submit events
+		function handleSubmit (event) {
+
+			// Don't reload the page when the form submits
+			event.preventDefault();
+
+			// Get the form data
+			let data = new FormData(event.target);
+			let product = data.get('product');
+
+			// Update the cart
+			cart[product] = Object.hasOwn(cart, product) ? cart[product] + 1 : 1;
+
+			// Update the cart count
+			updateCartCount();
+
+			// Show the callout
+			showCallout();
+
+		}
+
+		// Render initial UI
+		updateCartCount();
+		showCallout();
+
+		// Listen for events
+		form.addEventListener('submit', handleSubmit);
+	</script>
+
+</body>
+</html>
